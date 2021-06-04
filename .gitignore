@@ -290,6 +290,7 @@ $RECYCLE.BIN/
 
 # add
 # .env
+*.txt
 *.ipynb
 *.csv
 *.html
