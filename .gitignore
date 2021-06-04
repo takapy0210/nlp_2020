@@ -292,7 +292,7 @@ $RECYCLE.BIN/
 # .env
 *.ipynb
 *.csv
-# *.html
+*.html
 *.tsv
 *.bz
 *.pkl
