@@ -35,7 +35,6 @@ class PredictAPI():
     def predict(self, input_text):
         tfidf_vec = self.transform(input_text)
         # 推論
-        # predict = self.logreg.predict(tfidf_vec)
         predict = [np.max(self.logreg.predict_proba(tfidf_vec), axis=1), self.logreg.predict(tfidf_vec)]
         return predict
 

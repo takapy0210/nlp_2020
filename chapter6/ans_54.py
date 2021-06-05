@@ -35,7 +35,6 @@ class PredictAPI():
     def predict(self, input_text):
         tfidf_vec = self.transform(input_text)
         # 推論
-        # predict = self.logreg.predict(tfidf_vec)
         predict = [np.max(self.logreg.predict_proba(tfidf_vec), axis=1), self.logreg.predict(tfidf_vec)]
         return predict
 
@@ -45,6 +44,7 @@ def load_data() -> dict:
     # 読み込むファイルを定義
     inputs = {
         'train': 'train.txt',
+        'valid': 'valid.txt',
     }
 
     dfs = {}
@@ -61,12 +61,8 @@ if __name__ == "__main__":
 
     # テキストを与えるとそのカテゴリを予測できるようにする
     api = PredictAPI()
-    pred = api.predict(dfs['train']['title'])
+    train_score = api.logreg.score(api.transform(dfs['train']['title']), dfs['train']['category'])
+    valid_score = api.logreg.score(api.transform(dfs['valid']['title']), dfs['valid']['category'])
 
-    dfs['train']['pred_proba'] = pred[0]
-    dfs['train']['pred'] = pred[1]
-
-    print(dfs['train'][['title', 'category', 'pred_proba', 'pred']].head())
-
-    # train_score = logreg.score(X_train_vec, y_train)
-    # test_score = logreg.score(X_test_vec, y_test)
+    print(f'train score: {train_score}')
+    print(f'valid score: {valid_score}')
