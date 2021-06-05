@@ -1,12 +1,13 @@
 """
-54. 正解率の計測Permalink
-52で学習したロジスティック回帰モデルの正解率を，学習データおよび評価データ上で計測せよ．
+55. 混同行列の作成Permalink
+52で学習したロジスティック回帰モデルの混同行列（confusion matrix）を，学習データおよび評価データ上で作成せよ．
 """
 
 import pickle
 import numpy as np
 import pandas as pd
 import texthero as hero
+from sklearn.metrics import confusion_matrix
 
 
 class PredictAPI():
@@ -61,8 +62,10 @@ if __name__ == "__main__":
 
     # テキストを与えるとそのカテゴリを予測できるようにする
     api = PredictAPI()
-    train_score = api.logreg.score(api.transform(dfs['train']['title']), dfs['train']['category'])
-    test_score = api.logreg.score(api.transform(dfs['test']['title']), dfs['test']['category'])
+    y_train = dfs['train']['category']
+    y_test = dfs['test']['category']
+    train_pred = api.predict(dfs['train']['title'])[1]
+    test_pred = api.predict(dfs['test']['title'])[1]
 
-    print(f'train score: {train_score}')
-    print(f'test score: {test_score}')
+    print(f'train confusion matrix:\n {confusion_matrix(y_train, train_pred)}')
+    print(f'test confusion matrix:\n {confusion_matrix(y_test, test_pred)}')
