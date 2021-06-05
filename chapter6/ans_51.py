@@ -24,7 +24,7 @@ def load_data() -> dict:
 
     # データチェック
     for k in inputs.keys():
-        print(k)
+        print(k, '---', dfs[k].shape)
         print(dfs[k].head())
 
     return dfs
@@ -80,9 +80,13 @@ if __name__ == "__main__":
     X_test = pd.DataFrame(X_test.toarray(), columns=feat.tfidf_vec.get_feature_names())
 
     # 分割して保存
+    X_valid = X_train[len(dfs['train']):].reset_index(drop=True)
     X_train = X_train[:len(dfs['train'])].reset_index(drop=True)
-    X_valid = X_train[len(dfs['train']):]
 
     X_train.to_csv('X_train.txt', sep='\t', index=False)
     X_valid.to_csv('X_valid.txt', sep='\t', index=False)
     X_test.to_csv('X_test.txt', sep='\t', index=False)
+
+    print('X_train ---- ', X_train.shape)
+    print('X_valid ---- ', X_valid.shape)
+    print('X_test ---- ', X_test.shape)

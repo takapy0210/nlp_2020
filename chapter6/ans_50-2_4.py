@@ -28,9 +28,9 @@ train, test = train_test_split(df, test_size=0.2, random_state=42, stratify=df['
 valid, test = train_test_split(test, test_size=0.5, random_state=42, stratify=test['category'])
 
 # データの保存
-train.to_csv('./train.txt', sep='\t', index=False)
-valid.to_csv('./valid.txt', sep='\t', index=False)
-test.to_csv('./test.txt', sep='\t', index=False)
+train.to_csv('train.txt', sep='\t', index=False)
+valid.to_csv('valid.txt', sep='\t', index=False)
+test.to_csv('test.txt', sep='\t', index=False)
 
 print('train ---- ', train.shape)
 print(train['category'].value_counts())
