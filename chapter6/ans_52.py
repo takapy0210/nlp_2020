@@ -7,6 +7,7 @@ import pandas as pd
 import pickle
 from sklearn.linear_model import LogisticRegression
 
+
 def load_data() -> dict:
     """データの読み込み"""
     # 読み込むファイルを定義

@@ -5,6 +5,7 @@
 """
 
 import pandas as pd
+import pickle
 import texthero as hero
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -47,7 +48,7 @@ def preprocess(text) -> str:
 class FeatureExtraction():
 
     def __init__(self, min_df=1, max_df=1) -> None:
-        self.tfidf_vec = TfidfVectorizer(min_df=min_df, max_df=max_df)
+        self.tfidf_vec = TfidfVectorizer(min_df=min_df, max_df=max_df, ngram_range=(1, 2))
 
     def fit(self, input_text) -> None:
         self.tfidf_vec.fit(input_text)
@@ -70,10 +71,11 @@ if __name__ == "__main__":
     test['clean_title'] = test[['title']].apply(preprocess)
 
     # 特徴量抽出
-    feat = FeatureExtraction()
+    feat = FeatureExtraction(min_df=10, max_df=0.1)
     feat.fit(train['clean_title'])
     X_train = feat.transform(train['clean_title'])
     X_test = feat.transform(test['clean_title'])
+    pickle.dump(feat.tfidf_vec, open('tfidf_vec.pkl', 'wb'))  # 推論時にも使用するため、保存
 
     # DFに変換
     X_train = pd.DataFrame(X_train.toarray(), columns=feat.tfidf_vec.get_feature_names())
