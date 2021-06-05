@@ -6,7 +6,6 @@
 import numpy as np
 import pandas as pd
 import pickle
-import tqdm
 import texthero as hero
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
