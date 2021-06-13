@@ -8,7 +8,6 @@ from gensim.models import KeyedVectors
 
 
 if __name__ == "__main__":
-
     # ref. https://radimrehurek.com/gensim/models/word2vec.html#usage-examples
     model = KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin.gz', binary=True)
     print(model['United_States'])
