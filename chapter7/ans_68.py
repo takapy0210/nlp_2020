@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
     # k-meansクラスタリング
     n = 5
-    kmeans = KMeans(n_clusters=n)
+    kmeans = KMeans(n_clusters=n, random_state=42)
     kmeans.fit(countries_vec)
     for i in range(n):
         cluster = np.where(kmeans.labels_ == i)[0]
