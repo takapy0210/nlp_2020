@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 from gensim.models import KeyedVectors
 from sklearn.cluster import KMeans
-from tqdm import tqdm
-tqdm.pandas()
+from matplotlib import pyplot as plt
+from scipy.cluster.hierarchy import dendrogram, linkage
 
 
 if __name__ == "__main__":
@@ -19,14 +19,16 @@ if __name__ == "__main__":
     # ref. https://radimrehurek.com/gensim/models/word2vec.html#usage-examples
     model = KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin.gz', binary=True)
 
+    # モデルに含まれる国だけを抽出(195ヵ国→155ヵ国になる)
+    conclusion_model_countries = [country for country in countries_df['Country'].tolist() if country in model]
+    countries_df = countries_df[countries_df['Country'].isin(conclusion_model_countries)].reset_index(drop=True)
+
     # 国ベクトルの取得
     countries_vec = [model[country] for country in countries_df['Country'].tolist()]
 
-    # k-meansクラスタリング
-    n = 5
-    kmeans = KMeans(n_clusters=n, random_state=42)
-    kmeans.fit(countries_vec)
-    for i in range(n):
-        cluster = np.where(kmeans.labels_ == i)[0]
-        print(f'cluster: {i}')
-        print(', '.join([countries_df[k] for k in cluster]))
+    # Ward法によるクラスタリング
+    Z = linkage(countries_vec, method='ward')
+    dendrogram(Z, labels=countries_df['Country'].tolist())
+
+    plt.figure(figsize=(15, 5))
+    plt.show()
