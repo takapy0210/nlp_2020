@@ -3,10 +3,8 @@
 国名に関する単語ベクトルに対し，Ward法による階層型クラスタリングを実行せよ．さらに，クラスタリング結果をデンドログラムとして可視化せよ．
 """
 
-import numpy as np
 import pandas as pd
 from gensim.models import KeyedVectors
-from sklearn.cluster import KMeans
 from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
 

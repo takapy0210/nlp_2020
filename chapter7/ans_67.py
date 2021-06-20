@@ -7,8 +7,6 @@ import numpy as np
 import pandas as pd
 from gensim.models import KeyedVectors
 from sklearn.cluster import KMeans
-from tqdm import tqdm
-tqdm.pandas()
 
 
 if __name__ == "__main__":
