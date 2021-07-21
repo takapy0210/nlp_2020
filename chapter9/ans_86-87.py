@@ -1,6 +1,7 @@
 """
-84. 単語ベクトルの導入
-事前学習済みの単語ベクトル（例えば，Google Newsデータセット（約1,000億単語）での学習済み単語ベクトル）で単語埋め込みemb(x)を初期化し，学習せよ．
+86. 畳み込みニューラルネットワーク (CNN)
+ID番号で表現された単語列x=(x1,x2,…,xT)がある．ただし，Tは単語列の長さ，xt∈ℝVは単語のID番号のone-hot表記である（Vは単語の総数である）．
+畳み込みニューラルネットワーク（CNN: Convolutional Neural Network）を用い，単語列xからカテゴリyを予測するモデルを実装せよ．
 """
 
 import pandas as pd
@@ -10,9 +11,8 @@ import tensorflow as tf
 from gensim.models import KeyedVectors
 from sklearn.metrics import accuracy_score
 
-from tf_models import RNNModel
+from tf_models import CNNModel
 from utils import load_data, preprocess, build_vocabulary, text2sequence, filter_embeddings, seed_everything
-
 
 if __name__ == '__main__':
 
@@ -55,7 +55,19 @@ if __name__ == '__main__':
     # 学習
     seed_everything(42)
     tf.keras.backend.clear_session()
-    model = RNNModel(len(vocab.word_index)+1, len(y_train.unique()), embeddings=word_emb).build()
+    model = CNNModel(len(vocab.word_index)+1, len(y_train.unique()), embeddings=word_emb).build()
+
+    # 学習前の予測値 (Q.86の解答)
+    print(f'学習前の予測値: {model(X_train[:4])}')
+    """
+    >>
+    学習前の予測値:
+    [[0.2672577  0.24871875 0.18123615 0.3027874 ]
+    [0.34766647 0.27864766 0.14872281 0.22496302]
+    [0.25352648 0.28802907 0.18009081 0.27835366]
+    [0.26842362 0.3400092  0.17252302 0.2190442 ]]
+    """
+
     model.compile(
         optimizer='adam',
         loss='sparse_categorical_crossentropy',
@@ -90,7 +102,7 @@ if __name__ == '__main__':
     print(f'Test Accuracy: {accuracy_score(y_test, y_test_preds)}')
     """
     >>
-    Train Accuracy: 0.9990629685157422
-	Valid Accuracy: 0.9115442278860569
-	Test Accuracy: 0.9220389805097451
+    Train Accuracy: 0.9991566716641679
+    Valid Accuracy: 0.9197901049475262
+    Test Accuracy: 0.9287856071964018
     """
