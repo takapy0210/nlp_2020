@@ -57,7 +57,7 @@ if __name__ == '__main__':
     tf.keras.backend.clear_session()
     model = RNNModel(len(vocab.word_index)+1, len(y_train.unique()), embeddings=word_emb).build()
     model.compile(
-        optimizer='adam',
+        optimizer=tf.optimizers.SGD(),
         loss='sparse_categorical_crossentropy',
         metrics=['acc']
     )
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     print(f'Test Accuracy: {accuracy_score(y_test, y_test_preds)}')
     """
     >>
-    Train Accuracy: 0.9990629685157422
-	Valid Accuracy: 0.9115442278860569
-	Test Accuracy: 0.9220389805097451
+    Train Accuracy: 0.8146551724137931
+    Valid Accuracy: 0.7998500749625187
+    Test Accuracy: 0.7916041979010495
     """

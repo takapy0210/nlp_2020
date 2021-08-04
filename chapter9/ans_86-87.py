@@ -69,7 +69,7 @@ if __name__ == '__main__':
     """
 
     model.compile(
-        optimizer='adam',
+        optimizer=tf.optimizers.SGD(),
         loss='sparse_categorical_crossentropy',
         metrics=['acc']
     )
@@ -102,7 +102,5 @@ if __name__ == '__main__':
     print(f'Test Accuracy: {accuracy_score(y_test, y_test_preds)}')
     """
     >>
-    Train Accuracy: 0.9991566716641679
-    Valid Accuracy: 0.9197901049475262
-    Test Accuracy: 0.9287856071964018
+    hoge
     """

@@ -1,6 +1,8 @@
 """
 85. 双方向RNN・多層化
 順方向と逆方向のRNNの両方を用いて入力テキストをエンコードし，モデルを学習せよ．
+
+さらに，双方向RNNを多層化して実験せよ．
 """
 
 import pandas as pd
@@ -10,7 +12,7 @@ import tensorflow as tf
 from gensim.models import KeyedVectors
 from sklearn.metrics import accuracy_score
 
-from tf_models import BiRNNModel
+from tf_models import BiRNNModel, BiRNNModel_2L
 from utils import load_data, preprocess, build_vocabulary, text2sequence, filter_embeddings, seed_everything
 
 
@@ -52,12 +54,12 @@ if __name__ == '__main__':
     # Emb層に設定する重みの計算
     word_emb = filter_embeddings(w2vmodel, vocab, len(vocab.word_index)+1)
 
-    # 学習
+    # 双方向1層
     seed_everything(42)
     tf.keras.backend.clear_session()
     model = BiRNNModel(len(vocab.word_index)+1, len(y_train.unique()), embeddings=word_emb).build()
     model.compile(
-        optimizer='adam',
+        optimizer=tf.optimizers.SGD(),
         loss='sparse_categorical_crossentropy',
         metrics=['acc']
     )
@@ -85,12 +87,55 @@ if __name__ == '__main__':
     y_test_preds = np.argmax(y_test_preds, 1)
 
     # 正解率を出力
-    print(f'Train Accuracy: {accuracy_score(y_train, y_train_preds)}')
-    print(f'Valid Accuracy: {accuracy_score(y_valid, y_valid_preds)}')
-    print(f'Test Accuracy: {accuracy_score(y_test, y_test_preds)}')
+    print(f'Train 1L Accuracy: {accuracy_score(y_train, y_train_preds)}')
+    print(f'Valid 1L Accuracy: {accuracy_score(y_valid, y_valid_preds)}')
+    print(f'Test 1L Accuracy: {accuracy_score(y_test, y_test_preds)}')
     """
     >>
-    Train Accuracy: 0.9992503748125937
-    Valid Accuracy: 0.9175412293853074
-    Test Accuracy: 0.9220389805097451
+    Train 1L Accuracy: 0.838924287856072
+    Valid 1L Accuracy: 0.8200899550224887
+    Test 1L Accuracy: 0.8170914542728636
+    """
+
+    # 双方向2層
+    seed_everything(42)
+    tf.keras.backend.clear_session()
+    model = BiRNNModel_2L(len(vocab.word_index)+1, len(y_train.unique()), embeddings=word_emb).build()
+    model.compile(
+        optimizer=tf.optimizers.SGD(),
+        loss='sparse_categorical_crossentropy',
+        metrics=['acc']
+    )
+    result = model.fit(
+        x=X_train,
+        y=y_train,
+        validation_data=(X_valid, y_valid),
+        batch_size=256,
+        epochs=10,
+    )
+
+    # 学習曲線の保存
+    pd.DataFrame(result.history).plot(figsize=(10, 6))
+    plt.grid(True)
+    plt.savefig("learning_curves.png")
+
+    # 推論
+    y_train_preds = model.predict(X_train, verbose=1)
+    y_valid_preds = model.predict(X_valid, verbose=1)
+    y_test_preds = model.predict(X_test, verbose=1)
+
+    # 一番確率の高いクラスを取得
+    y_train_preds = np.argmax(y_train_preds, 1)
+    y_valid_preds = np.argmax(y_valid_preds, 1)
+    y_test_preds = np.argmax(y_test_preds, 1)
+
+    # 正解率を出力
+    print(f'Train 2L Accuracy: {accuracy_score(y_train, y_train_preds)}')
+    print(f'Valid 2L Accuracy: {accuracy_score(y_valid, y_valid_preds)}')
+    print(f'Test 2L Accuracy: {accuracy_score(y_test, y_test_preds)}')
+    """
+    >>
+    Train 2L Accuracy: 0.8549475262368815
+    Valid 2L Accuracy: 0.8253373313343328
+    Test 2L Accuracy: 0.8268365817091454
     """

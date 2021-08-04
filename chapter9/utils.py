@@ -56,7 +56,6 @@ def text2sequence(texts, vocab, maxlen=300):
 
 def filter_embeddings(w2vmodel, vocab, num_words):
     """Filter word vectors"""
-
     embedding_matrix = np.zeros((num_words, w2vmodel.vector_size))
     for word, i in vocab.word_index.items():
         embedding_vector = None
@@ -70,6 +69,7 @@ def filter_embeddings(w2vmodel, vocab, num_words):
 
 
 def seed_everything(seed=0):
+    """seedを固定する"""
     random.seed(seed)
     np.random.seed(seed)
     tf.random.set_seed(seed)
