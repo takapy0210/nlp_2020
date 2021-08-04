@@ -176,4 +176,3 @@ class RobertaModel:
         output_layer = self.output(cls_token)
         model = Model(inputs=[input_layer], outputs=[output_layer])
         return model
-
