@@ -102,5 +102,7 @@ if __name__ == '__main__':
     print(f'Test Accuracy: {accuracy_score(y_test, y_test_preds)}')
     """
     >>
-    hoge
+    Train Accuracy: 0.7718328335832084
+    Valid Accuracy: 0.7593703148425787
+    Test Accuracy: 0.7638680659670165
     """

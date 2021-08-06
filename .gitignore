@@ -310,3 +310,4 @@ $RECYCLE.BIN/
 .ipynb_checkpoints
 !_features_memo.csv
 .env
+*.bin.gz

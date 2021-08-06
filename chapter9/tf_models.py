@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Input, Embedding, SimpleRNN, LSTM, Conv1D, GlobalMaxPooling1D, Bidirectional
 from tensorflow.keras.models import Model
-from transformers import TFRobertaModel
+from transformers import TFBertModel, TFRobertaModel
 
 
 class RNNModel:
@@ -167,12 +167,30 @@ class RobertaModel:
         """
         self.transformer = TFRobertaModel.from_pretrained(model_name)
         self.input = tf.keras.layers.Input(shape=(max_len, ), dtype=tf.int32, name='input_word_ids')
-        self.output = tf.keras.layers.Dense(output_dim, activation='linear', dtype='float32', name='output')
+        self.fc = tf.keras.layers.Dense(output_dim, activation='softmax', name='output')
 
     def build(self):
         input_layer = self.input
         sequence_output = self.transformer(input_layer)[0]
         cls_token = sequence_output[:, 0, :]  # We only need the cls_token, resulting in a 2d array
-        output_layer = self.output(cls_token)
+        output_layer = self.fc(cls_token)
+        model = Model(inputs=[input_layer], outputs=[output_layer])
+        return model
+
+
+class BertModel:
+
+    def __init__(self, model_name, max_len, output_dim=1):
+        """モデルを構築する
+        """
+        self.transformer = TFBertModel.from_pretrained(model_name)
+        self.input = tf.keras.layers.Input(shape=(max_len, ), dtype=tf.int32, name='input_word_ids')
+        self.fc = tf.keras.layers.Dense(output_dim, activation='softmax', name='output')
+
+    def build(self):
+        input_layer = self.input
+        sequence_output = self.transformer(input_layer)[0]
+        cls_token = sequence_output[:, 0, :]  # We only need the cls_token, resulting in a 2d array
+        output_layer = self.fc(cls_token)
         model = Model(inputs=[input_layer], outputs=[output_layer])
         return model
