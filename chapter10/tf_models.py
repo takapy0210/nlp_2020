@@ -196,6 +196,13 @@ class InferenceAPI:
         return decoded
 
 
+class InferenceAPIforAttention(InferenceAPI):
+
+    def _compute_decoder_output(self, target_seq, state, enc_output=None):
+        output, state = self.decoder_model.predict([target_seq, enc_output, state])
+        return output, state
+
+
 class LuongAttention:
 
     def __init__(self, units=300):
