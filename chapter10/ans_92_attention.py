@@ -51,8 +51,8 @@ def predict(text):
     api = InferenceAPIforAttention(encoder, decoder, ja_vocab, en_vocab)
     decoded = api.predict(text=text[0])
 
-    LOGGER.info(f"文章:\t{text[0]}")
-    LOGGER.info(f"翻訳:\t{' '.join(decoded)}")
+    print(f"文章:\t{text[0]}")
+    print(f"翻訳:\t{' '.join(decoded)}")
 
 
 if __name__ == '__main__':
