@@ -77,4 +77,3 @@ def seed_everything(seed=0):
     np.random.seed(seed)
     tf.random.set_seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
-    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'

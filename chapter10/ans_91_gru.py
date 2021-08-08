@@ -11,7 +11,7 @@ import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 from tf_models import build_vocabulary, create_dataset, Encoder, Decoder, Seq2seq, InferenceAPI
-from nlp_preprocessing import preprocess_dataset, preprocess_ja
+from nlp_preprocessing import preprocess_dataset
 from utils import elapsed_time, get_logger, seed_everything
 
 BATCH_SIZE = 32
@@ -99,8 +99,7 @@ def main():
 
     # データの前処理
     LOGGER.info('Preprocessing...')
-    train_ja_texts = preprocess_ja(kyoto_train_ja['text'])
-    train_ja_texts = preprocess_dataset(train_ja_texts)
+    train_ja_texts = preprocess_dataset(kyoto_train_ja['token'])
     train_en_texts = preprocess_dataset(kyoto_train_en['text'])
 
     # 辞書の作成
@@ -121,7 +120,7 @@ if __name__ == '__main__':
 
 
 """
->> 
+>> 10000件で学習させた場合の学習出力結果
 Source: <start> 雪舟 （ せっしゅう 、 1420 年 （ 応永 27 年 ） - 1506 年 （ 永 正 3 年 ） ） は 号 で 、 15 世紀 後半 室町 時代 に 活躍 し た 水墨 画家 ・ 禅僧 で 、 画聖 と も 称え られる 。 <end>
 Target: in the year , he was appointed to the shingon sect , and in the early heian period , and was the same as the chief abbot of the jodo sect .
 ===================================================================================

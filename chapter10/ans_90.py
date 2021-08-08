@@ -5,6 +5,7 @@
 """
 
 import pandas as pd
+from nlp_preprocessing import preprocess_ja
 
 DIR_NAME = 'kftt-data-1.0/data/tok/'
 
@@ -32,6 +33,12 @@ if __name__ == '__main__':
     kyoto_train_en = load_dataframe_from_txt('kyoto-train.en')
     kyoto_dev_en = load_dataframe_from_txt('kyoto-dev.en')
     kyoto_test_en = load_dataframe_from_txt('kyoto-test.en')
+
+    # jaに関しては分かち書きをする
+    kyoto_dev_ja.loc[:, 'token'] = preprocess_ja(kyoto_dev_ja['text'])
+    kyoto_test_ja.loc[:, 'token'] = preprocess_ja(kyoto_test_ja['text'])
+    kyoto_train_ja = kyoto_train_ja.head(200000).copy()  # trainはデータが多いので200000件に絞る
+    kyoto_train_ja.loc[:, 'token'] = preprocess_ja(kyoto_train_ja['text'])
 
     # TSV形式で保存
     kyoto_train_ja.to_csv('kyoto_train_ja.tsv', sep='\t', index=False)
