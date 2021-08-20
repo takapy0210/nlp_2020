@@ -5,10 +5,21 @@ import math
 import logging
 from functools import wraps
 import random
+import pickle
 
 import psutil
 import numpy as np
 import tensorflow as tf
+
+
+def save_pickle(onject, file_name):
+    with open(file_name, 'wb') as handle:
+        pickle.dump(onject, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+def load_pickle(file_name):
+    with open(file_name, 'rb') as handle:
+        return pickle.load(handle)
 
 
 def elapsed_time(logger):

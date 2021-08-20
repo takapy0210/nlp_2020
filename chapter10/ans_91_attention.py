@@ -12,7 +12,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 from tf_models import build_vocabulary, create_dataset, Encoder, AttentionDecoder, Seq2seq, InferenceAPIforAttention
 from nlp_preprocessing import preprocess_dataset
-from utils import elapsed_time, get_logger, seed_everything
+from utils import elapsed_time, get_logger, seed_everything, save_pickle
 
 BATCH_SIZE = 32
 EPOCHS = 100
@@ -95,8 +95,8 @@ def main():
     kyoto_train_en = pd.read_csv('kyoto_train_en.tsv', sep='\t')
 
     # データを絞って学習させる
-    kyoto_train_ja = kyoto_train_ja.head(50000).copy()
-    kyoto_train_en = kyoto_train_en.head(50000).copy()
+    kyoto_train_ja = kyoto_train_ja.head(100000).copy()
+    kyoto_train_en = kyoto_train_en.head(100000).copy()
 
     # データの前処理
     LOGGER.info('Preprocessing...')
@@ -108,7 +108,9 @@ def main():
     en_vocab = build_vocabulary(train_en_texts)
     ja_vocab = build_vocabulary(train_ja_texts)
 
-    # TODO: 辞書を保存する
+    # 辞書を保存する
+    save_pickle(en_vocab, 'en_vocab.pkl')
+    save_pickle(en_vocab, 'ja_vocab.pkl')
 
     # 学習
     train(train_ja_texts, train_en_texts, ja_vocab, en_vocab)
