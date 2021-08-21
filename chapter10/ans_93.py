@@ -47,6 +47,9 @@ def main():
     LOGGER.info('Load Data...')
     kyoto_train_ja = pd.read_csv('kyoto_train_ja.tsv', sep='\t')
     kyoto_train_en = pd.read_csv('kyoto_train_en.tsv', sep='\t')
+    kyoto_train_ja = kyoto_train_ja.head(100000).copy()
+    kyoto_train_en = kyoto_train_en.head(100000).copy()
+
     # 評価データ
     kyoto_test_ja = pd.read_csv('kyoto_test_ja.tsv', sep='\t')
     kyoto_test_en = pd.read_csv('kyoto_test_en.tsv', sep='\t')
@@ -55,6 +58,7 @@ def main():
     LOGGER.info('Preprocessing...')
     train_ja_texts = preprocess_dataset(kyoto_train_ja['token'])
     train_en_texts = preprocess_dataset(kyoto_train_en['text'])
+
     test_ja_texts = preprocess_dataset(kyoto_test_ja['token'])
     test_en_texts = preprocess_dataset(kyoto_test_en['text'])
 
@@ -68,6 +72,7 @@ def main():
     decoder = AttentionDecoder.load(DECODER_ARCH, MODEL_PATH)
     api = InferenceAPIforAttention(encoder, decoder, ja_vocab, en_vocab)
 
+    LOGGER.info('Calculate BLEU Score...')
     bleu_score = evaluate_bleu(test_ja_texts, test_en_texts, api)
     LOGGER.info(f'BLEU: {bleu_score}')
 
@@ -78,5 +83,5 @@ if __name__ == '__main__':
 
 """
 >>
-BLEU: 2.230035721391387e-233
+BLEU: 8.857600764085284e-158
 """

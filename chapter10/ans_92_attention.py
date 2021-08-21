@@ -9,7 +9,7 @@ import pandas as pd
 
 from tf_models import build_vocabulary, Encoder, AttentionDecoder, InferenceAPIforAttention
 from nlp_preprocessing import preprocess_dataset, preprocess_ja
-from utils import get_logger, seed_everything
+from utils import get_logger, seed_everything, load_pickle
 
 BATCH_SIZE = 32
 EPOCHS = 100
@@ -29,8 +29,8 @@ def predict(text):
     kyoto_train_en = pd.read_csv('kyoto_train_en.tsv', sep='\t')
 
     # データを絞って学習させる
-    kyoto_train_ja = kyoto_train_ja.head(50000).copy()
-    kyoto_train_en = kyoto_train_en.head(50000).copy()
+    kyoto_train_ja = kyoto_train_ja.head(100000).copy()
+    kyoto_train_en = kyoto_train_en.head(100000).copy()
 
     # データの前処理
     LOGGER.info('Preprocessing...')
@@ -41,6 +41,10 @@ def predict(text):
     LOGGER.info('Build vocabulary...')
     en_vocab = build_vocabulary(train_en_texts)
     ja_vocab = build_vocabulary(train_ja_texts)
+
+    # 辞書のロード
+    # en_vocab = load_pickle('en_vocab.pkl')
+    # ja_vocab = load_pickle('ja_vocab.pkl')
 
     LOGGER.info('翻訳...')
     text = preprocess_ja(text)
@@ -56,6 +60,9 @@ def predict(text):
 
 
 if __name__ == '__main__':
+    """実行方法
+    python3 ans_92_attention.py 最近は台風が来ていて、湿気が多くて寝るとき辛い。
+    """
 
     # 引数が存在する場合は取得
     parser = argparse.ArgumentParser(description='inference text')
